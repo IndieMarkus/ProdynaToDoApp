@@ -20,6 +20,13 @@ public interface ToDoEntryService {
      */
     ToDoEntryDTO save(ToDoEntryDTO toDoEntryDTO);
 
+
+    /**
+     * Check if current user is owner of entry with corresponding id.
+     * @return true iff the id's entry's owner coincides with current user.
+     */
+    boolean allowedToModify(Long id);
+
     /**
      * Get all the toDoEntries.
      *

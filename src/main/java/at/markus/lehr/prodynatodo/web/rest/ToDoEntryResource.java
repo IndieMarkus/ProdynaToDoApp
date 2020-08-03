@@ -62,6 +62,9 @@ public class ToDoEntryResource {
         if (toDoEntryDTO.getId() != null) {
             throw new BadRequestAlertException("A new toDoEntry cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (toDoEntryDTO.getCreatorId() != null) {
+            throw new BadRequestAlertException("The creator ID must not be manually set", ENTITY_NAME, "idexists");
+        }
         ToDoEntryDTO result = toDoEntryService.save(toDoEntryDTO);
         return ResponseEntity.created(new URI("/api/to-do-entries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -82,6 +85,9 @@ public class ToDoEntryResource {
         log.debug("REST request to update ToDoEntry : {}", toDoEntryDTO);
         if (toDoEntryDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!toDoEntryService.allowedToModify(toDoEntryDTO.getId())) {
+            throw new BadRequestAlertException("The current user is not the owner of the modified todo entry", ENTITY_NAME, "wrongcreator");
         }
         ToDoEntryDTO result = toDoEntryService.save(toDoEntryDTO);
         return ResponseEntity.ok()
@@ -138,6 +144,9 @@ public class ToDoEntryResource {
     @DeleteMapping("/to-do-entries/{id}")
     public ResponseEntity<Void> deleteToDoEntry(@PathVariable Long id) {
         log.debug("REST request to delete ToDoEntry : {}", id);
+        if (!toDoEntryService.allowedToModify(id)) {
+            throw new BadRequestAlertException("The current user is not the owner of the modified todo entry", ENTITY_NAME, "wrongcreator");
+        }
         toDoEntryService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }

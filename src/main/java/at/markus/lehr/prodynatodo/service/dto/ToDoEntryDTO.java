@@ -6,9 +6,10 @@ import java.io.Serializable;
 
 /**
  * A DTO for the {@link at.markus.lehr.prodynatodo.domain.ToDoEntry} entity.
+ * For simplicity's sake, all crud operations share this dto, even though not all fields are always permitted
  */
 public class ToDoEntryDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -24,7 +25,7 @@ public class ToDoEntryDTO implements Serializable {
 
 
     private Long creatorId;
-    
+
     public Long getId() {
         return id;
     }
