@@ -1,5 +1,6 @@
 package at.markus.lehr.prodynatodo.service;
 
+import at.markus.lehr.prodynatodo.domain.ToDoEntry;
 import at.markus.lehr.prodynatodo.service.dto.ToDoEntryDTO;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,14 @@ public interface ToDoEntryService {
      */
     ToDoEntryDTO save(ToDoEntryDTO toDoEntryDTO);
 
+    /**
+     * Save a toDoEntry.
+     *
+     * @param toDoEntry the entity to save.
+     * @return the persisted entity.
+     */
+    ToDoEntryDTO save(ToDoEntry toDoEntry);
+
 
     /**
      * Check if current user is owner of entry with corresponding id.
@@ -34,6 +43,14 @@ public interface ToDoEntryService {
      * @return the list of entities.
      */
     Page<ToDoEntryDTO> findAll(Pageable pageable);
+
+    /**
+     * Get all current (=not done) toDoEntries.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<ToDoEntryDTO> findCurrent(Pageable pageable);
 
 
     /**

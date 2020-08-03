@@ -104,6 +104,7 @@ public class ToDoEntryResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser
     public void createToDoEntry() throws Exception {
         int databaseSizeBeforeCreate = toDoEntryRepository.findAll().size();
         // Create the ToDoEntry
@@ -167,9 +168,10 @@ public class ToDoEntryResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser
     public void getAllToDoEntries() throws Exception {
         // Initialize the database
-        toDoEntryRepository.saveAndFlush(toDoEntry);
+        toDoEntryService.save(toDoEntry);
 
         // Get all the toDoEntryList
         restToDoEntryMockMvc.perform(get("/api/to-do-entries?sort=id,desc"))
@@ -182,12 +184,12 @@ public class ToDoEntryResourceIT {
             .andExpect(jsonPath("$.[*].dueDate").value(hasItem(DEFAULT_DUE_DATE.toString())))
             .andExpect(jsonPath("$.[*].done").value(hasItem(DEFAULT_DONE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getToDoEntry() throws Exception {
         // Initialize the database
-        toDoEntryRepository.saveAndFlush(toDoEntry);
+        toDoEntryService.save(toDoEntry);
 
         // Get the toDoEntry
         restToDoEntryMockMvc.perform(get("/api/to-do-entries/{id}", toDoEntry.getId()))
@@ -210,9 +212,10 @@ public class ToDoEntryResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser
     public void updateToDoEntry() throws Exception {
         // Initialize the database
-        toDoEntryRepository.saveAndFlush(toDoEntry);
+        toDoEntryService.save(toDoEntry);
 
         int databaseSizeBeforeUpdate = toDoEntryRepository.findAll().size();
 
@@ -265,9 +268,10 @@ public class ToDoEntryResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser
     public void deleteToDoEntry() throws Exception {
         // Initialize the database
-        toDoEntryRepository.saveAndFlush(toDoEntry);
+        toDoEntryService.save(toDoEntry);
 
         int databaseSizeBeforeDelete = toDoEntryRepository.findAll().size();
 

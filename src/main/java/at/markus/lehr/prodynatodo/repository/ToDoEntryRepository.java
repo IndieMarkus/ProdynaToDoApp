@@ -17,4 +17,6 @@ import java.util.List;
 @Repository
 public interface ToDoEntryRepository extends JpaRepository<ToDoEntry, Long> {
     Page<ToDoEntry> findAllByPublishedIsTrueOrCreatorEquals(Pageable pageable, User creator);
+
+    Page<ToDoEntry> findAllByPublishedIsTrueAndDoneIsFalseOrCreatorEqualsAndDoneIsFalse(Pageable pageable, User creator);
 }

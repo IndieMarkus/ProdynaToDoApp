@@ -57,8 +57,8 @@ public class UserJWTControllerIT {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
+            .andExpect(header().string("x-app-token", not(nullValue())))
+            .andExpect(header().string("x-app-token", not(is(emptyString()))));
     }
 
     @Test
@@ -81,8 +81,8 @@ public class UserJWTControllerIT {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
+            .andExpect(header().string("x-app-token", not(nullValue())))
+            .andExpect(header().string("x-app-token", not(is(emptyString()))));
     }
 
     @Test
@@ -94,6 +94,6 @@ public class UserJWTControllerIT {
             .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
-            .andExpect(header().doesNotExist("Authorization"));
+            .andExpect(header().doesNotExist("x-app-token"));
     }
 }

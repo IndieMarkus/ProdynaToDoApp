@@ -52,6 +52,14 @@ public class ToDoEntryServiceImpl implements ToDoEntryService {
     }
 
     @Override
+    public ToDoEntryDTO save(ToDoEntry toDoEntry) {
+        log.debug("Request to save ToDoEntry : {}", toDoEntry);
+        setCurrentUser(toDoEntry);
+        toDoEntry = toDoEntryRepository.save(toDoEntry);
+        return toDoEntryMapper.toDto(toDoEntry);
+    }
+
+    @Override
     public boolean allowedToModify(Long id) {
         ToDoEntry entry = this.toDoEntryRepository.getOne(id);
         Long currentId = getCurrentUser().getId();
@@ -75,6 +83,14 @@ public class ToDoEntryServiceImpl implements ToDoEntryService {
     @Override
     @Transactional(readOnly = true)
     public Page<ToDoEntryDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all ToDoEntries");
+        return toDoEntryRepository.findAllByPublishedIsTrueOrCreatorEquals(pageable, getCurrentUser())
+            .map(toDoEntryMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ToDoEntryDTO> findCurrent(Pageable pageable) {
         log.debug("Request to get all ToDoEntries");
         return toDoEntryRepository.findAllByPublishedIsTrueOrCreatorEquals(pageable, getCurrentUser())
             .map(toDoEntryMapper::toDto);

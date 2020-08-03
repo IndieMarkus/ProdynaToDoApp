@@ -105,6 +105,20 @@ public class ToDoEntryResource {
     }
 
     /**
+     * {@code GET  /current-to-do-entries} : get all the toDoEntries which are not yet done.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of toDoEntries in body.
+     */
+    @GetMapping("/current-to-do-entries")
+    public ResponseEntity<List<ToDoEntryDTO>> getCurrentToDoEntries(Pageable pageable) {
+        log.debug("REST request to get a page of currently open (=not done) ToDoEntries");
+        Page<ToDoEntryDTO> page = toDoEntryService.findCurrent(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /to-do-entries/:id} : get the "id" toDoEntry.
      *
      * @param id the id of the toDoEntryDTO to retrieve.
