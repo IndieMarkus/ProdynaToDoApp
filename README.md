@@ -1,5 +1,10 @@
 # ProdynaToDoApp
 
+This simple "ToDo"-Entry management app is a programming exercise from Prodyna given to me during a Job applicaition.
+From here on, the rest of the readme is automatically generated and contains all instructions for building and running.
+
+#
+
 This application was generated using JHipster 6.10.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.10.1](https://www.jhipster.tech/documentation-archive/v6.10.1).
 
 ## Development
