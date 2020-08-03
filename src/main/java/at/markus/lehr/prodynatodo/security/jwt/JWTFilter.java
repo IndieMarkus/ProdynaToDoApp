@@ -16,7 +16,7 @@ import org.springframework.web.filter.GenericFilterBean;
  * found.
  */
 public class JWTFilter extends GenericFilterBean {
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "x-app-token";
 
     private final TokenProvider tokenProvider;
 
@@ -38,8 +38,8 @@ public class JWTFilter extends GenericFilterBean {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken)) {
+            return bearerToken;
         }
         return null;
     }

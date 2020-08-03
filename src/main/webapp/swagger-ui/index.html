@@ -50,7 +50,7 @@
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken")
                         || sessionStorage.getItem("jhi-authenticationtoken"));
                     if (authToken) {
-                        req.headers['Authorization'] = "Bearer " + authToken;
+                        req.headers['x-app-token'] = authToken;
                     }
                     return req;
                 }
