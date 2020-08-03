@@ -1,6 +1,10 @@
 # ProdynaToDoApp
 
 This simple "ToDo"-Entry management app is a programming exercise from Prodyna given to me during a Job applicaition.
+
+The presentation slides can be found under https://docs.google.com/presentation/d/1S2up8O7WMQGUJJBGsXZGIe4xdEyH6ORw73wtJ_dmq7Y/edit?usp=sharing 
+or in the pdf file in this repository.
+
 From here on, the rest of the readme is automatically generated and contains all instructions for building and running.
 
 #
