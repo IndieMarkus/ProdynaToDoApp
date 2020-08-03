@@ -1,0 +1,46 @@
+{
+  "name": "ToDoEntry",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "published",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dueDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "done",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "toDoEntry",
+      "relationshipName": "creator",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200803152646",
+  "entityTableName": "to_do_entry",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

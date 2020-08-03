@@ -1,0 +1,83 @@
+<div>
+    <h2 id="page-heading">
+        <span>To Do Entries</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-to-do-entry" [routerLink]="['/to-do-entry/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new To Do Entry
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="toDoEntries?.length === 0">
+        <span>No toDoEntries found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="toDoEntries && toDoEntries.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="title"><span>Title</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="published"><span>Published</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="dueDate"><span>Due Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="done"><span>Done</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="creatorId"><span>Creator</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let toDoEntry of toDoEntries ;trackBy: trackId">
+                    <td><a [routerLink]="['/to-do-entry', toDoEntry.id, 'view']">{{ toDoEntry.id }}</a></td>
+                    <td>{{ toDoEntry.title }}</td>
+                    <td>{{ toDoEntry.description }}</td>
+                    <td>{{ toDoEntry.published }}</td>
+                    <td>{{ toDoEntry.dueDate | date:'medium' }}</td>
+                    <td>{{ toDoEntry.done }}</td>
+                    <td>
+                        {{ toDoEntry.creatorId }}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/to-do-entry', toDoEntry.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/to-do-entry', toDoEntry.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(toDoEntry)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="toDoEntries && toDoEntries.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,6 @@ entity ToDoEntry {
     done Boolean
 }
 
-relationship OneToMany {
-	User{creator} to ToDoEntry
+relationship ManyToOne {
+	ToDoEntry{creator} to User
 }

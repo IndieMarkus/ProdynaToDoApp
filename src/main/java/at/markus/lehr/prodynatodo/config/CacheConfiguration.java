@@ -47,6 +47,7 @@ public class CacheConfiguration {
             createCache(cm, at.markus.lehr.prodynatodo.domain.User.class.getName());
             createCache(cm, at.markus.lehr.prodynatodo.domain.Authority.class.getName());
             createCache(cm, at.markus.lehr.prodynatodo.domain.User.class.getName() + ".authorities");
+            createCache(cm, at.markus.lehr.prodynatodo.domain.ToDoEntry.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
