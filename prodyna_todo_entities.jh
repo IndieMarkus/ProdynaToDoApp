@@ -1,0 +1,15 @@
+@service(serviceImpl)
+@paginate(pagination)
+@filter
+@dto(mapstruct)
+entity ToDoEntry {
+	title String required
+    description String
+    published Boolean
+    dueDate Instant
+    done Boolean
+}
+
+relationship OneToMany {
+	User{creator} to ToDoEntry
+}
