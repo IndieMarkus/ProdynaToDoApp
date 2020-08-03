@@ -1,6 +1,7 @@
 package at.markus.lehr.prodynatodo.service.impl;
 
 import at.markus.lehr.prodynatodo.domain.ToDoEntry;
+import at.markus.lehr.prodynatodo.domain.User;
 import at.markus.lehr.prodynatodo.repository.ToDoEntryRepository;
 import at.markus.lehr.prodynatodo.repository.UserRepository;
 import at.markus.lehr.prodynatodo.security.SecurityUtils;
@@ -9,11 +10,15 @@ import at.markus.lehr.prodynatodo.service.dto.ToDoEntryDTO;
 import at.markus.lehr.prodynatodo.service.mapper.ToDoEntryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -49,19 +54,29 @@ public class ToDoEntryServiceImpl implements ToDoEntryService {
     @Override
     public boolean allowedToModify(Long id) {
         ToDoEntry entry = this.toDoEntryRepository.getOne(id);
-        Long currentId = this.userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get().getId();
+        Long currentId = getCurrentUser().getId();
         return entry.getCreator().getId().equals(currentId);
     }
 
+    private User getCurrentUser() {
+        try {
+            return this.userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        } catch (NoSuchElementException ex) {
+            String reason = "The currently logged in user object could not be extracted from the db";
+            log.error(reason);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, reason, ex);
+        }
+    }
+
     private void setCurrentUser(ToDoEntry entry) {
-        entry.setCreator(this.userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get());
+        entry.setCreator(getCurrentUser());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<ToDoEntryDTO> findAll(Pageable pageable) {
         log.debug("Request to get all ToDoEntries");
-        return toDoEntryRepository.findAll(pageable)
+        return toDoEntryRepository.findAllByPublishedIsTrueOrCreatorEquals(pageable, getCurrentUser())
             .map(toDoEntryMapper::toDto);
     }
 

@@ -1,6 +1,5 @@
 @service(serviceImpl)
 @paginate(pagination)
-@filter
 @dto(mapstruct)
 entity ToDoEntry {
 	title String required

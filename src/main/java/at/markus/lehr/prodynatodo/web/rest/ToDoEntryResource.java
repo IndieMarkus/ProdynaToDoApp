@@ -3,8 +3,6 @@ package at.markus.lehr.prodynatodo.web.rest;
 import at.markus.lehr.prodynatodo.service.ToDoEntryService;
 import at.markus.lehr.prodynatodo.web.rest.errors.BadRequestAlertException;
 import at.markus.lehr.prodynatodo.service.dto.ToDoEntryDTO;
-import at.markus.lehr.prodynatodo.service.dto.ToDoEntryCriteria;
-import at.markus.lehr.prodynatodo.service.ToDoEntryQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -42,11 +40,8 @@ public class ToDoEntryResource {
 
     private final ToDoEntryService toDoEntryService;
 
-    private final ToDoEntryQueryService toDoEntryQueryService;
-
-    public ToDoEntryResource(ToDoEntryService toDoEntryService, ToDoEntryQueryService toDoEntryQueryService) {
+    public ToDoEntryResource(ToDoEntryService toDoEntryService) {
         this.toDoEntryService = toDoEntryService;
-        this.toDoEntryQueryService = toDoEntryQueryService;
     }
 
     /**
@@ -99,27 +94,14 @@ public class ToDoEntryResource {
      * {@code GET  /to-do-entries} : get all the toDoEntries.
      *
      * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of toDoEntries in body.
      */
     @GetMapping("/to-do-entries")
-    public ResponseEntity<List<ToDoEntryDTO>> getAllToDoEntries(ToDoEntryCriteria criteria, Pageable pageable) {
-        log.debug("REST request to get ToDoEntries by criteria: {}", criteria);
-        Page<ToDoEntryDTO> page = toDoEntryQueryService.findByCriteria(criteria, pageable);
+    public ResponseEntity<List<ToDoEntryDTO>> getAllToDoEntries(Pageable pageable) {
+        log.debug("REST request to get a page of ToDoEntries");
+        Page<ToDoEntryDTO> page = toDoEntryService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /to-do-entries/count} : count all the toDoEntries.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
-    @GetMapping("/to-do-entries/count")
-    public ResponseEntity<Long> countToDoEntries(ToDoEntryCriteria criteria) {
-        log.debug("REST request to count ToDoEntries by criteria: {}", criteria);
-        return ResponseEntity.ok().body(toDoEntryQueryService.countByCriteria(criteria));
     }
 
     /**
